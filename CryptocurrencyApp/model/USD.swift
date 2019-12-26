@@ -8,8 +8,8 @@
 
 import Foundation
 
-struct USD: Decodable {
-    var price: Double
-    var percentChange24h: Double
-    var percentChange7d: Double
+struct USD: Codable {
+  var price: Double
+  var percent_change_24h: Double
+  var percent_change_7d: Double
 }

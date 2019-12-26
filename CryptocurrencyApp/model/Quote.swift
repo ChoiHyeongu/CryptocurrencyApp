@@ -8,6 +8,6 @@
 
 import Foundation
 
-struct Quote: Decodable {
-    var usd: USD
+struct Quote: Codable {
+    var USD: USD
 }

@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct StatusData: Decodable {
+struct StatusData: Codable {
     var error_code: Int?
     var error_message: String?
 }

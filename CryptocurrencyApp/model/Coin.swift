@@ -8,7 +8,8 @@
 
 import Foundation
 
-struct Coin: Decodable {
-    var symbol: String
-    var name: String
+struct Coin: Codable {
+  var symbol: String
+  var name: String
+  var quote: Quote
 }
