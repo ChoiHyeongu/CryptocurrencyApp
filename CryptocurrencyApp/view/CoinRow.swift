@@ -10,12 +10,51 @@ import SwiftUI
 
 struct CoinRow: View {
   
-  let coin: Coin
+  var coin: Coin
   
   var body: some View {
     VStack{
-      Text(self.coin.name)
+      HStack{
+        coinName
+        Spacer()
+        Text("$ \(self.coin.quote.USD.price)")
+          .fontWeight(.bold)
+      }.padding()
+      percentageView
     }
+  }
+  
+  var percentageView: some View {
+    HStack {
+      Text("24h: \(self.roundPercentage(coin.quote.USD.percent_change_24h))")
+        .foregroundColor(coin.quote.USD.percent_change_24h < 0 ? .red : .blue)
+      Spacer()
+      Text("24h: \(self.roundPercentage(coin.quote.USD.percent_change_7d))")
+        .foregroundColor(coin.quote.USD.percent_change_7d < 0 ? .red : .blue)
+    }
+    .padding(.leading, 55)
+    .padding(.trailing, 15)
+  }
+  
+  var coinName: some View {
+    HStack{
+      Image(coin.symbol)
+        .resizable()
+        .frame(width: 30, height: 30)
+      Text(coin.symbol)
+        .fontWeight(.bold)
+      Text("|")
+        .fontWeight(.semibold)
+      Text(coin.name)
+    }
+  }
+  
+  func roundPercentage(_ percentage: Double) -> String{
+    let numberFormatter = NumberFormatter()
+    numberFormatter.roundingMode = .halfUp
+    numberFormatter.minimumSignificantDigits = 2
+    numberFormatter.maximumSignificantDigits = 2
+    return numberFormatter.string(from: NSNumber(value: percentage)) ?? "0"
   }
 }
 

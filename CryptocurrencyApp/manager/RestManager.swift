@@ -9,8 +9,7 @@
 import Alamofire
 import Foundation
 
-class RestManager {
-  static let shared: RestManager = RestManager()
+class RestManager: ObservableObject {
   @Published var parsingData: ParsingData?
   
   
@@ -38,15 +37,11 @@ class RestManager {
   
   func getCoinData(completionHandler: @escaping (Result<ParsingData, Error>) -> Void) {
     self.request = AF.request("\(Config.baseURL)", headers: ["X-CMC_PRO_API_KEY":Config.API_KEY])
-    self.request?.responseDecodable{ (response: DataResponse<ParsingData, AFError>) in
+    self.request?.responseDecodable { (response: DataResponse<ParsingData, AFError>) in
       switch response.result {
-      case .success(let parsingData):
-        print("success")
-        self.parsingData = parsingData
-        print(parsingData)
-        completionHandler(.success(parsingData))
+      case .success(let userDatas):
+        completionHandler(.success(userDatas))
       case .failure(let error):
-        print("fail")
         completionHandler(.failure(error))
       }
     }

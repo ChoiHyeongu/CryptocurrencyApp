@@ -7,26 +7,28 @@
 //
 
 import SwiftUI
+import Combine
 
 struct ContentView: View {
-  
   @State var handler: ((Result<ParsingData, Error>) -> Void)?
-  @State var parsingData: ParsingData?
-  @State var coins: [Coin] = [Coin(symbol: "BTC", name: "Bitcoin", quote: Quote(USD: USD(price: 10.0, percent_change_24h: 10.0, percent_change_7d: 10.0)))]
-  var restMananger = RestManager()
+  @State var coins: [Coin] = [Coin(symbol: "...", name: "...", quote: Quote(USD: USD(price: 0, percent_change_24h: 0, percent_change_7d: 0)))]
+  @ObservedObject var restManager = RestManager()
+  
+  let timer = Timer.publish(every: 5, on: .main, in: .common).autoconnect()
+  var parsingData: ParsingData?
   
   var body: some View {
-//    NavigationView {
-//      List(coins, id:\.name) { coin in
-//        Text(coin.name)
-//      }
-//    }.onAppear {
-//      self.getCoinData()
-//      self.parsingData = self.restMananger.parsingData
-//      self.coins = self.parsingData!.data
-//    }
-    
-    Text("123").onAppear{
+    NavigationView {
+      List(coins, id:\.name) { coin in
+        CoinRow(coin: coin)
+      }
+      .navigationBarTitle(Text("CryptocurrencyApp"))
+      .onReceive(timer) { _ in
+        print("Request")
+        self.getCoinData()
+      }
+    }
+    .onAppear {
       self.getCoinData()
     }
   }
@@ -34,18 +36,16 @@ struct ContentView: View {
   func getCoinData() {
     self.handler = { result in
       //guard let result = result else {return}
-      print(result)
       switch result {
       case .success(let data):
-        guard let coinData = data.status.error_code else { return }
-        print (coinData)
+        let allCoins = data.data as [Coin]
+        self.coins = Array(allCoins.prefix(upTo: 10))
       case .failure(let error):
         print("Error", error.localizedDescription)
       }
     }
     
-    RestManager.shared.getCoinData(completionHandler: handler!)
-
+    restManager.getCoinData(completionHandler: handler!)
   }
 }
 
