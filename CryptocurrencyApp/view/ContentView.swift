@@ -14,7 +14,7 @@ struct ContentView: View {
   @State var coins: [Coin] = [Coin(symbol: "...", name: "...", quote: Quote(USD: USD(price: 0, percent_change_24h: 0, percent_change_7d: 0)))]
   @ObservedObject var restManager = RestManager()
   
-  let timer = Timer.publish(every: 5, on: .main, in: .common).autoconnect()
+  let timer = Timer.publish(every: 10, on: .main, in: .common).autoconnect()
   var parsingData: ParsingData?
   
   var body: some View {
