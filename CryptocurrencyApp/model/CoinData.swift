@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct ParsingData: Codable {
+struct CoinData: Codable {
     var status: StatusData
     var data: [Coin]
 }

@@ -9,9 +9,10 @@
 import Alamofire
 import Foundation
 
-class RestManager: ObservableObject {
-  @Published var parsingData: ParsingData?
-  
+class CoinRepository: ObservableObject {
+  static let shared = CoinRepository()
+
+  @Published var CoinData: CoinData?
   
   private var request: DataRequest? {
     didSet {
@@ -20,28 +21,28 @@ class RestManager: ObservableObject {
   }
   
   private var reachability: NetworkReachabilityManager!
-  
+
   init() {
     monitorReachability()
   }
-  
+
   private func monitorReachability() {
     reachability = NetworkReachabilityManager(host: "www.apple.com")
-    
+
     let listener: NetworkReachabilityManager.Listener = { status in
       print("Reachability Status Changed: \(status)")
     }
-    
+
     reachability.startListening(onUpdatePerforming: listener)
   }
-  
-  func getCoinData(completionHandler: @escaping (Result<ParsingData, Error>) -> Void) {
-    self.request = AF.request("\(Config.baseURL)", headers: ["X-CMC_PRO_API_KEY":Config.API_KEY])
-    self.request?.responseDecodable { (response: DataResponse<ParsingData, AFError>) in
+
+  func getCoinData(completionHandler: @escaping (Result<CoinData, Error>) -> Void) {
+    request = AF.request("\(Config.baseURL)", headers: ["X-CMC_PRO_API_KEY": Config.API_KEY])
+    request?.responseDecodable { (response: DataResponse<CoinData, AFError>) in
       switch response.result {
-      case .success(let userDatas):
+      case let .success(userDatas):
         completionHandler(.success(userDatas))
-      case .failure(let error):
+      case let .failure(error):
         completionHandler(.failure(error))
       }
     }

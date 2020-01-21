@@ -29,7 +29,7 @@ struct CoinRow: View {
       Text("24h: \(self.roundPercentage(coin.quote.USD.percent_change_24h))")
         .foregroundColor(coin.quote.USD.percent_change_24h < 0 ? .red : .blue)
       Spacer()
-      Text("24h: \(self.roundPercentage(coin.quote.USD.percent_change_7d))")
+      Text("7d: \(self.roundPercentage(coin.quote.USD.percent_change_7d))")
         .foregroundColor(coin.quote.USD.percent_change_7d < 0 ? .red : .blue)
     }
     .padding(.leading, 55)
